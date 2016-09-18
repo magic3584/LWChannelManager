@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
 
   s.name         = "LWChannelManager"
-  s.version      = "1.0.0"
+  s.version      = "1.0.1"
   s.summary      = "LWChannelManager"
 
 
@@ -55,7 +55,7 @@ Pod::Spec.new do |s|
   #  the lib prefix of their name.
   #
 
-  # s.frameworks = "SomeFramework", "AnotherFramework"
+   s.frameworks = "UIKit"
 
   # s.library   = "iconv"
   # s.libraries = "iconv", "xml2"
