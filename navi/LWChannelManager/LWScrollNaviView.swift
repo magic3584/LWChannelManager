@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc protocol LWScrollNaviViewDelegate {
+public protocol LWScrollNaviViewDelegate: class {
     //点击navi
     func didTapNaviButton(naviView: LWScrollNaviView)
     //点击添加
@@ -21,7 +21,7 @@ public class LWScrollNaviView: UIView {
     private var indicatorView: UIView!
     private var addButton: UIButton?
     
-    weak var delegate: LWScrollNaviViewDelegate?
+    public weak var delegate: LWScrollNaviViewDelegate?
     
     private var titleArray: [String]!
     private var labelArray: [UILabel] = []
@@ -35,7 +35,7 @@ public class LWScrollNaviView: UIView {
     private let normalColor = UIColor.blackColor()
     private let selectedColor = UIColor.redColor()
     
-    var lastSelectedIndex = 0
+    public var lastSelectedIndex = 0
     
     public init(frame: CGRect, titles: [String], showAddButton: Bool) {
         super.init(frame: frame)

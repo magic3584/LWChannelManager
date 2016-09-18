@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LWChannelView: UIView {
+public class LWChannelView: UIView {
 
     private var collectionView: UICollectionView?
     
@@ -25,14 +25,14 @@ class LWChannelView: UIView {
     private var selectedIndexPath: NSIndexPath!
     private var selectedCell: LWChannelCollectionViewCell!
 
-    init(frame: CGRect, selectedChannels: [String], unselectedChannels: [String]) {
+    public init(frame: CGRect, selectedChannels: [String], unselectedChannels: [String]) {
         super.init(frame: frame)
         self.selectedChannelArray = selectedChannels
         self.unselectedChannelArray = unselectedChannels
         configUI()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -189,11 +189,11 @@ class LWChannelView: UIView {
 
 extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 2
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return selectedChannelArray!.count
         } else {
@@ -201,7 +201,7 @@ extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
         }
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! LWChannelCollectionViewCell
         cell.backgroundColor = nil
         
@@ -219,7 +219,7 @@ extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         let view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "section", forIndexPath: indexPath) as! LWChannelSectionView
         if indexPath.section == 0 {
             view.label?.text = "  我的频道（点击删除频道）"
@@ -234,7 +234,7 @@ extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
         return CGSize(width: collectionView.frame.size.width, height: 30)
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {//点击取消
             if indexPath.row == 0 {
                 return
