@@ -7,20 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		212AFB9A1D87A01F00CF1303 /* LWChannelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AFB991D87A01F00CF1303 /* LWChannelView.swift */; };
-		212AFB9C1D87A30100CF1303 /* LWChannelCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AFB9B1D87A30100CF1303 /* LWChannelCollectionViewCell.swift */; };
 		212AFB9E1D87A7D100CF1303 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212AFB9D1D87A7D100CF1303 /* SecondViewController.swift */; };
 		214522511D869FE600D8459B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214522501D869FE600D8459B /* AppDelegate.swift */; };
 		214522531D869FE600D8459B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214522521D869FE600D8459B /* ViewController.swift */; };
 		214522561D869FE600D8459B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 214522541D869FE600D8459B /* Main.storyboard */; };
 		214522581D869FE600D8459B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 214522571D869FE600D8459B /* Assets.xcassets */; };
 		2145225B1D869FE600D8459B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 214522591D869FE600D8459B /* LaunchScreen.storyboard */; };
-		214522631D86A0AB00D8459B /* LWScrollNaviView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214522621D86A0AB00D8459B /* LWScrollNaviView.swift */; };
+		218A6D7D1D8E36DD003630D8 /* LWChannelCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218A6D7A1D8E36DD003630D8 /* LWChannelCollectionViewCell.swift */; };
+		218A6D7E1D8E36DD003630D8 /* LWChannelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218A6D7B1D8E36DD003630D8 /* LWChannelView.swift */; };
+		218A6D7F1D8E36DD003630D8 /* LWScrollNaviView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218A6D7C1D8E36DD003630D8 /* LWScrollNaviView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		212AFB991D87A01F00CF1303 /* LWChannelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LWChannelView.swift; sourceTree = "<group>"; };
-		212AFB9B1D87A30100CF1303 /* LWChannelCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LWChannelCollectionViewCell.swift; sourceTree = "<group>"; };
 		212AFB9D1D87A7D100CF1303 /* SecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		2145224D1D869FE600D8459B /* navi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = navi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		214522501D869FE600D8459B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -29,7 +27,9 @@
 		214522571D869FE600D8459B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2145225A1D869FE600D8459B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2145225C1D869FE700D8459B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		214522621D86A0AB00D8459B /* LWScrollNaviView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LWScrollNaviView.swift; sourceTree = "<group>"; };
+		218A6D7A1D8E36DD003630D8 /* LWChannelCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LWChannelCollectionViewCell.swift; sourceTree = "<group>"; };
+		218A6D7B1D8E36DD003630D8 /* LWChannelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LWChannelView.swift; sourceTree = "<group>"; };
+		218A6D7C1D8E36DD003630D8 /* LWScrollNaviView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LWScrollNaviView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,18 +62,26 @@
 		2145224F1D869FE600D8459B /* navi */ = {
 			isa = PBXGroup;
 			children = (
+				218A6D791D8E36DD003630D8 /* LWChannelManager */,
 				214522501D869FE600D8459B /* AppDelegate.swift */,
 				214522521D869FE600D8459B /* ViewController.swift */,
 				212AFB9D1D87A7D100CF1303 /* SecondViewController.swift */,
-				214522621D86A0AB00D8459B /* LWScrollNaviView.swift */,
-				212AFB991D87A01F00CF1303 /* LWChannelView.swift */,
-				212AFB9B1D87A30100CF1303 /* LWChannelCollectionViewCell.swift */,
 				214522541D869FE600D8459B /* Main.storyboard */,
 				214522571D869FE600D8459B /* Assets.xcassets */,
 				214522591D869FE600D8459B /* LaunchScreen.storyboard */,
 				2145225C1D869FE700D8459B /* Info.plist */,
 			);
 			path = navi;
+			sourceTree = "<group>";
+		};
+		218A6D791D8E36DD003630D8 /* LWChannelManager */ = {
+			isa = PBXGroup;
+			children = (
+				218A6D7A1D8E36DD003630D8 /* LWChannelCollectionViewCell.swift */,
+				218A6D7B1D8E36DD003630D8 /* LWChannelView.swift */,
+				218A6D7C1D8E36DD003630D8 /* LWScrollNaviView.swift */,
+			);
+			path = LWChannelManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,11 +155,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				218A6D7F1D8E36DD003630D8 /* LWScrollNaviView.swift in Sources */,
 				212AFB9E1D87A7D100CF1303 /* SecondViewController.swift in Sources */,
-				214522631D86A0AB00D8459B /* LWScrollNaviView.swift in Sources */,
-				212AFB9A1D87A01F00CF1303 /* LWChannelView.swift in Sources */,
+				218A6D7D1D8E36DD003630D8 /* LWChannelCollectionViewCell.swift in Sources */,
 				214522531D869FE600D8459B /* ViewController.swift in Sources */,
-				212AFB9C1D87A30100CF1303 /* LWChannelCollectionViewCell.swift in Sources */,
+				218A6D7E1D8E36DD003630D8 /* LWChannelView.swift in Sources */,
 				214522511D869FE600D8459B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
