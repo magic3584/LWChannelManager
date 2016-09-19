@@ -14,9 +14,8 @@
 
 2. Drag the ``LWChannelManager`` folder into your project.
 
-# TODO
-1. Swift 3.0 update
-
-2. Carthage support
-
+# Note
 导航切换未添加，可以根据项目需要自行修改。
+
+# License
+LWChannelManager is provided under the MIT license. See LICENSE file for details.
