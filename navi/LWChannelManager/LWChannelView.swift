@@ -8,22 +8,22 @@
 
 import UIKit
 
-public class LWChannelView: UIView {
+open class LWChannelView: UIView {
 
-    private var collectionView: UICollectionView?
+    fileprivate var collectionView: UICollectionView?
     
     var selectedChannelArray: [String]?
-    private var unselectedChannelArray: [String]?
+    fileprivate var unselectedChannelArray: [String]?
     
     //距屏幕的间隔，并且两个cell之间为padding＊2
-    private let padding:CGFloat = 10.0
+    fileprivate let padding:CGFloat = 10.0
     
     //手势开始时的差
-    private var deltaSize: CGSize!
+    fileprivate var deltaSize: CGSize!
     
-    private var snapCellImageView: UIImageView!
-    private var selectedIndexPath: NSIndexPath!
-    private var selectedCell: LWChannelCollectionViewCell!
+    fileprivate var snapCellImageView: UIImageView!
+    fileprivate var selectedIndexPath: IndexPath!
+    fileprivate var selectedCell: LWChannelCollectionViewCell!
 
     public init(frame: CGRect, selectedChannels: [String], unselectedChannels: [String]) {
         super.init(frame: frame)
@@ -36,25 +36,25 @@ public class LWChannelView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configUI() {
+    fileprivate func configUI() {
         self.collectionView = {
-            self.userInteractionEnabled = true
+            self.isUserInteractionEnabled = true
             
             let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .Vertical
+            layout.scrollDirection = .vertical
             
             let width = (self.bounds.size.width - padding * 8) / 4.0
             let height: CGFloat = 30.0
             
-            layout.itemSize = CGSizeMake(width, height)
+            layout.itemSize = CGSize(width: width, height: height)
             layout.minimumLineSpacing = 10.0
             layout.minimumInteritemSpacing = padding * 2
             layout.sectionInset = UIEdgeInsetsMake(10.0, padding, 10.0, padding)
             
-            let collectionView = UICollectionView.init(frame: CGRectMake(0, 0, self.frame.size.width, self.frame.size.height), collectionViewLayout: layout)
-            collectionView.backgroundColor = UIColor.whiteColor()
-            collectionView.registerClass(LWChannelSectionView.self, forSupplementaryViewOfKind: "UICollectionElementKindSectionHeader", withReuseIdentifier: "section")
-            collectionView.registerClass(LWChannelCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+            let collectionView = UICollectionView.init(frame: CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height), collectionViewLayout: layout)
+            collectionView.backgroundColor = UIColor.white
+            collectionView.register(LWChannelSectionView.self, forSupplementaryViewOfKind: "UICollectionElementKindSectionHeader", withReuseIdentifier: "section")
+            collectionView.register(LWChannelCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
             collectionView.delegate = self
             collectionView.dataSource = self
             let longPress = UILongPressGestureRecognizer.init(target: self, action: #selector(self.longPressAction(_:)))
@@ -65,26 +65,26 @@ public class LWChannelView: UIView {
         }()
     }
     
-    @objc private func longPressAction(gesture: UILongPressGestureRecognizer) {
+    @objc fileprivate func longPressAction(_ gesture: UILongPressGestureRecognizer) {
         
-        let location = gesture.locationInView(self.collectionView!)
-        let possibleIndexPath = self.collectionView!.indexPathForItemAtPoint(location)
+        let location = gesture.location(in: self.collectionView!)
+        let possibleIndexPath = self.collectionView!.indexPathForItem(at: location)
 
         switch(gesture.state) {
             
-            case .Began:
+            case .began:
                 //保证有效的cell
                 if possibleIndexPath != nil {
                     
                     //上面第一个不动
-                    if possibleIndexPath! == NSIndexPath.init(forRow: 0, inSection: 0) { break }
+                    if possibleIndexPath! == IndexPath.init(row: 0, section: 0) { break }
                     
                     selectedIndexPath = possibleIndexPath
                     
-                    let cell = self.collectionView!.cellForItemAtIndexPath(selectedIndexPath)! as!LWChannelCollectionViewCell
+                    let cell = self.collectionView!.cellForItem(at: selectedIndexPath)! as!LWChannelCollectionViewCell
                     selectedCell = cell
                     
-                    deltaSize = CGSizeMake(location.x - cell.frame.origin.x, location.y - cell.frame.origin.y)
+                    deltaSize = CGSize(width: location.x - cell.frame.origin.x, height: location.y - cell.frame.origin.y)
                     
                     snapCellImageView = self.snapForCell(cell)
                     cell.setDashLayer(true)
@@ -94,66 +94,66 @@ public class LWChannelView: UIView {
                     self.collectionView!.addSubview(snapCellImageView)
                 }
             
-            case .Changed:
+            case .changed:
                 
                 if snapCellImageView == nil {
                     return
                 }
                 
-                snapCellImageView.frame.origin = CGPointMake(location.x - deltaSize.width, location.y - deltaSize.height)
+                snapCellImageView.frame.origin = CGPoint(x: location.x - deltaSize.width, y: location.y - deltaSize.height)
                 selectedCell.alpha = 0.7
 
                 if possibleIndexPath != nil && selectedIndexPath != nil {
                     
-                    if possibleIndexPath == NSIndexPath.init(forRow: 0, inSection: 0) ||
-                    selectedIndexPath == NSIndexPath.init(forRow: 0, inSection: 0) { return }
+                    if possibleIndexPath == IndexPath.init(row: 0, section: 0) ||
+                    selectedIndexPath == IndexPath.init(row: 0, section: 0) { return }
 
-                    if possibleIndexPath!.section == selectedIndexPath.section {//同一块区域
+                    if (possibleIndexPath! as NSIndexPath).section == selectedIndexPath.section {//同一块区域
                         
-                        if possibleIndexPath!.section == 0 {//上面的
+                        if (possibleIndexPath! as NSIndexPath).section == 0 {//上面的
                             
-                            if possibleIndexPath!.row > selectedIndexPath.row {
-                                for index in selectedIndexPath.row..<possibleIndexPath!.row {
+                            if (possibleIndexPath! as NSIndexPath).row > selectedIndexPath.row {
+                                for index in selectedIndexPath.row..<(possibleIndexPath! as NSIndexPath).row {
                                     selectedChannelArray!.exchangeChannelArray(betweenIndex: index, andIndex: index + 1)
                                 }
                             }
                             
-                            if possibleIndexPath!.row < selectedIndexPath.row {
+                            if (possibleIndexPath! as NSIndexPath).row < selectedIndexPath.row {
                                 var index = selectedIndexPath.row
-                                for _ in possibleIndexPath!.row..<selectedIndexPath.row {
+                                for _ in (possibleIndexPath! as NSIndexPath).row..<selectedIndexPath.row {
                                     selectedChannelArray!.exchangeChannelArray(betweenIndex: index, andIndex: index - 1)
                                     index -= 1
                                 }
                             }
                         } else {//下面的
                             
-                            if possibleIndexPath!.row > selectedIndexPath.row {
-                                for index in selectedIndexPath.row..<possibleIndexPath!.row {
+                            if (possibleIndexPath! as NSIndexPath).row > selectedIndexPath.row {
+                                for index in selectedIndexPath.row..<(possibleIndexPath! as NSIndexPath).row {
                                     unselectedChannelArray!.exchangeChannelArray(betweenIndex: index, andIndex: index + 1)
                                 }
                             }
                             
-                            if possibleIndexPath!.row < selectedIndexPath.row {
+                            if (possibleIndexPath! as NSIndexPath).row < selectedIndexPath.row {
                                 var index = selectedIndexPath.row
-                                for _ in possibleIndexPath!.row..<selectedIndexPath.row {
+                                for _ in (possibleIndexPath! as NSIndexPath).row..<selectedIndexPath.row {
                                     unselectedChannelArray!.exchangeChannelArray(betweenIndex: index, andIndex: index - 1)
                                     index -= 1
                                 }
                             }
                         }
-                    } else if possibleIndexPath!.section > selectedIndexPath.section {//往下移动
-                        let channel = selectedChannelArray!.removeAtIndex(selectedIndexPath.row)
-                        unselectedChannelArray!.insert(channel, atIndex: possibleIndexPath!.row)
-                    } else if possibleIndexPath!.section < selectedIndexPath.section {//往下移动
-                        let channel = unselectedChannelArray!.removeAtIndex(selectedIndexPath.row)
-                        selectedChannelArray!.insert(channel, atIndex: possibleIndexPath!.row)
+                    } else if (possibleIndexPath! as NSIndexPath).section > selectedIndexPath.section {//往下移动
+                        let channel = selectedChannelArray!.remove(at: selectedIndexPath.row)
+                        unselectedChannelArray!.insert(channel, at: (possibleIndexPath! as NSIndexPath).row)
+                    } else if (possibleIndexPath! as NSIndexPath).section < selectedIndexPath.section {//往下移动
+                        let channel = unselectedChannelArray!.remove(at: selectedIndexPath.row)
+                        selectedChannelArray!.insert(channel, at: (possibleIndexPath! as NSIndexPath).row)
                     }
                     
-                    self.collectionView!.moveItemAtIndexPath(selectedIndexPath, toIndexPath: possibleIndexPath!)
+                    self.collectionView!.moveItem(at: selectedIndexPath, to: possibleIndexPath!)
                     selectedIndexPath = possibleIndexPath
                 }
                 
-            case .Ended:
+            case .ended:
                 
                 if selectedCell != nil {
                     selectedCell.setDashLayer(false)
@@ -173,27 +173,27 @@ public class LWChannelView: UIView {
         }
     }
     
-    private func snapForCell(cell: UIView) -> UIImageView {
+    fileprivate func snapForCell(_ cell: UIView) -> UIImageView {
         UIGraphicsBeginImageContextWithOptions(cell.bounds.size, false, 0.0)
-        cell.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        cell.layer.render(in: UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         let snap = UIImageView(image: image)
         return snap
     }
     
-    private func changedChannels(channels: [String]) {
-        NSNotificationCenter.defaultCenter().postNotificationName("LWChangeChannelNotification", object: self)
+    fileprivate func changedChannels(_ channels: [String]) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "LWChangeChannelNotification"), object: self)
     }
 }
 
 extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
     
-    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
     
-    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return selectedChannelArray!.count
         } else {
@@ -201,27 +201,27 @@ extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
         }
     }
     
-    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! LWChannelCollectionViewCell
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! LWChannelCollectionViewCell
         cell.backgroundColor = nil
         
         let text: String?
         
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
+        if (indexPath as NSIndexPath).section == 0 {
+            if (indexPath as NSIndexPath).row == 0 {
                 cell.backgroundColor = UIColor.init(red: 240.0/255.0, green: 240.0/255.0, blue: 240.0/255.0, alpha: 1)
             }
-            text = selectedChannelArray![indexPath.row]
+            text = selectedChannelArray![(indexPath as NSIndexPath).row]
         } else {
-            text = unselectedChannelArray![indexPath.row]
+            text = unselectedChannelArray![(indexPath as NSIndexPath).row]
         }
         cell.label!.text = text
         return cell
     }
     
-    public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        let view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "section", forIndexPath: indexPath) as! LWChannelSectionView
-        if indexPath.section == 0 {
+    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "section", for: indexPath) as! LWChannelSectionView
+        if (indexPath as NSIndexPath).section == 0 {
             view.label?.text = "  我的频道（点击删除频道）"
         } else {
             view.label?.text = "  点击添加以下频道"
@@ -229,20 +229,20 @@ extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
         return view
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 
         return CGSize(width: collectionView.frame.size.width, height: 30)
     }
     
-    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 0 {//点击取消
-            if indexPath.row == 0 {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).section == 0 {//点击取消
+            if (indexPath as NSIndexPath).row == 0 {
                 return
             }
-            let channel = self.selectedChannelArray?.removeAtIndex(indexPath.row)
+            let channel = self.selectedChannelArray?.remove(at: (indexPath as NSIndexPath).row)
             self.unselectedChannelArray?.append(channel!)
         } else {//点击选中
-            let channel = self.unselectedChannelArray?.removeAtIndex(indexPath.row)
+            let channel = self.unselectedChannelArray?.remove(at: (indexPath as NSIndexPath).row)
             self.selectedChannelArray?.append(channel!)
         }
         collectionView.reloadData()
@@ -252,7 +252,7 @@ extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
 }
 
 class LWChannelSectionView: UICollectionReusableView {
-    private var label: UILabel?
+    fileprivate var label: UILabel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -263,11 +263,11 @@ class LWChannelSectionView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configUI() {
+    fileprivate func configUI() {
         self.backgroundColor = UIColor.init(red: 245.0/255.0, green: 245.0/255.0, blue: 245.0/255.0, alpha: 1)
         self.label = {
             let label = UILabel.init(frame: self.bounds)
-            label.font = UIFont.systemFontOfSize(14)
+            label.font = UIFont.systemFont(ofSize: 14)
             self.addSubview(label)
             return label
         }()

@@ -10,38 +10,38 @@ import UIKit
 
 public protocol LWScrollNaviViewDelegate: class {
     //点击navi
-    func didTapNaviButton(naviView: LWScrollNaviView)
+    func didTapNaviButton(_ naviView: LWScrollNaviView)
     //点击添加
-    func didTapAddButton(naviView: LWScrollNaviView)
+    func didTapAddButton(_ naviView: LWScrollNaviView)
 }
 
-public class LWScrollNaviView: UIView {
+open class LWScrollNaviView: UIView {
 
-    private var scrollView: UIScrollView!
-    private var indicatorView: UIView!
-    private var addButton: UIButton?
+    fileprivate var scrollView: UIScrollView!
+    fileprivate var indicatorView: UIView!
+    fileprivate var addButton: UIButton?
     
-    public weak var delegate: LWScrollNaviViewDelegate?
+    open weak var delegate: LWScrollNaviViewDelegate?
     
-    private var titleArray: [String]!
-    private var labelArray: [UILabel] = []
-    private var showAddButton: Bool?
+    fileprivate var titleArray: [String]!
+    fileprivate var labelArray: [UILabel] = []
+    fileprivate var showAddButton: Bool?
     //缓存每个label的宽度
-    private var labelWidthArray: [CGFloat] = []
+    fileprivate var labelWidthArray: [CGFloat] = []
     
     ///按钮的间隔
-    private let padding:CGFloat = 10.0
+    fileprivate let padding:CGFloat = 10.0
     
-    private let normalColor = UIColor.blackColor()
-    private let selectedColor = UIColor.redColor()
+    fileprivate let normalColor = UIColor.black
+    fileprivate let selectedColor = UIColor.red
     
-    public var lastSelectedIndex = 0
+    open var lastSelectedIndex = 0
     
     public init(frame: CGRect, titles: [String], showAddButton: Bool) {
         super.init(frame: frame)
         self.titleArray = titles
         self.showAddButton = showAddButton
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.changedChannel(_:)), name: "LWChangeChannelNotification", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.changedChannel(_:)), name: NSNotification.Name(rawValue: "LWChangeChannelNotification"), object: nil)
         configUI()
     }
     
@@ -51,48 +51,48 @@ public class LWScrollNaviView: UIView {
     
     //MARK: - private func
     
-    private func configUI() {
+    fileprivate func configUI() {
         self.scrollView = {
-            self.userInteractionEnabled = true
+            self.isUserInteractionEnabled = true
             
             let width = self.frame.size.width
             let height = self.frame.size.height
             
             if (self.showAddButton == true) {
                 //位置最右，宽高相等
-                self.addButton = UIButton.init(frame: CGRectMake(width - height, 0, height, height))
-                self.addButton?.setTitle("添加", forState: .Normal)
-                self.addButton?.backgroundColor = UIColor.redColor()
-                self.addButton?.addTarget(self, action: #selector(self.tapAddButton(_:)), forControlEvents: .TouchUpInside)
+                self.addButton = UIButton.init(frame: CGRect(x: width - height, y: 0, width: height, height: height))
+                self.addButton?.setTitle("添加", for: UIControlState())
+                self.addButton?.backgroundColor = UIColor.red
+                self.addButton?.addTarget(self, action: #selector(self.tapAddButton(_:)), for: .touchUpInside)
                 self.addSubview(self.addButton!)
             }
             
             let buttonWidth = self.addButton?.frame.size.width ?? 0.0
             
-            let scrollView = UIScrollView.init(frame: CGRectMake(0, 0, width - buttonWidth, self.frame.size.height))
+            let scrollView = UIScrollView.init(frame: CGRect(x: 0, y: 0, width: width - buttonWidth, height: self.frame.size.height))
             scrollView.showsHorizontalScrollIndicator = false
             self.addSubview(scrollView)
             
             var totalWidth:CGFloat = 0.0
             
-            for (index, title) in self.titleArray.enumerate() {
+            for (index, title) in self.titleArray.enumerated() {
                 
                 let label = UILabel()
     
                 label.tag = index
                 label.text = title
                 label.textColor = normalColor
-                label.font = UIFont.systemFontOfSize(14)
-                label.textAlignment = .Center
+                label.font = UIFont.systemFont(ofSize: 14)
+                label.textAlignment = .center
                 
                 label.sizeToFit()
                 
-                label.frame = CGRectMake(totalWidth + padding, 0, label.frame.size.width, label.frame.size.height)
+                label.frame = CGRect(x: totalWidth + padding, y: 0, width: label.frame.size.width, height: label.frame.size.height)
                 label.center.y = scrollView.frame.size.height * 0.5
                 
                 totalWidth += label.frame.size.width + padding
                 
-                label.userInteractionEnabled = true
+                label.isUserInteractionEnabled = true
                 let tapGR = UITapGestureRecognizer.init(target: self, action: #selector(self.tapAction))
                 label.addGestureRecognizer(tapGR)
                 
@@ -100,10 +100,10 @@ public class LWScrollNaviView: UIView {
                 labelArray.append(label)
                 scrollView.addSubview(label)
             }
-            scrollView.contentSize = CGSizeMake(totalWidth + padding, 0)
+            scrollView.contentSize = CGSize(width: totalWidth + padding, height: 0)
 
             self.indicatorView = {
-                let view = UIView.init(frame: CGRectMake(0, height - 1, 0, 1))
+                let view = UIView.init(frame: CGRect(x: 0, y: height - 1, width: 0, height: 1))
                 view.backgroundColor = selectedColor
                 scrollView.addSubview(view)
                 return view
@@ -112,7 +112,7 @@ public class LWScrollNaviView: UIView {
             //默认第一个选中
             let label = labelArray[lastSelectedIndex]
             label.textColor = selectedColor
-            label.transform = CGAffineTransformMakeScale(1.2, 1.2)
+            label.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
 
             self.indicatorView.frame.size.width = label.frame.size.width
             self.indicatorView.center.x = label.center.x
@@ -122,19 +122,19 @@ public class LWScrollNaviView: UIView {
         
     }
     
-    @objc private func tapAction(tapGR: UITapGestureRecognizer) {
+    @objc fileprivate func tapAction(_ tapGR: UITapGestureRecognizer) {
         selectIndex(tapGR.view!.tag)
         self.delegate?.didTapNaviButton(self)
     }
     
-    @objc private func tapAddButton(button: UIButton) {
+    @objc fileprivate func tapAddButton(_ button: UIButton) {
         self.delegate?.didTapAddButton(self)
     }
     
     ///重新布局
-    @objc private func changedChannel(noti: NSNotification) {
+    @objc fileprivate func changedChannel(_ noti: Notification) {
         //先清除旧的
-        for (_, label) in self.labelArray.enumerate() {
+        for (_, label) in self.labelArray.enumerated() {
             label.removeFromSuperview()
         }
         self.titleArray.removeAll()
@@ -146,24 +146,24 @@ public class LWScrollNaviView: UIView {
         self.titleArray = (noti.object as! LWChannelView).selectedChannelArray!
         var totalWidth:CGFloat = 0.0
         
-        for (index, title) in self.titleArray.enumerate() {
+        for (index, title) in self.titleArray.enumerated() {
             
             let label = UILabel()
             
             label.tag = index
             label.text = title
             label.textColor = normalColor
-            label.font = UIFont.systemFontOfSize(14)
-            label.textAlignment = .Center
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.textAlignment = .center
             
             label.sizeToFit()
             
-            label.frame = CGRectMake(totalWidth + padding, 0, label.frame.size.width, label.frame.size.height)
+            label.frame = CGRect(x: totalWidth + padding, y: 0, width: label.frame.size.width, height: label.frame.size.height)
             label.center.y = scrollView.frame.size.height * 0.5
             
             totalWidth += label.frame.size.width + padding
             
-            label.userInteractionEnabled = true
+            label.isUserInteractionEnabled = true
             let tapGR = UITapGestureRecognizer.init(target: self, action: #selector(self.tapAction))
             label.addGestureRecognizer(tapGR)
             
@@ -171,13 +171,13 @@ public class LWScrollNaviView: UIView {
             labelArray.append(label)
             scrollView.addSubview(label)
         }
-        scrollView.contentSize = CGSizeMake(totalWidth + padding, 0)
-        scrollView.setContentOffset(CGPointZero, animated: false)
+        scrollView.contentSize = CGSize(width: totalWidth + padding, height: 0)
+        scrollView.setContentOffset(CGPoint.zero, animated: false)
         
         //默认第一个选中
         let label = labelArray[lastSelectedIndex]
         label.textColor = selectedColor
-        label.transform = CGAffineTransformMakeScale(1.2, 1.2)
+        label.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         
         self.indicatorView.frame.size.width = label.frame.size.width
         self.indicatorView.center.x = label.center.x
@@ -185,18 +185,18 @@ public class LWScrollNaviView: UIView {
     
     //MARK: - public func
     ///设置选中的index
-    public func selectIndex(index: Int) {
+    open func selectIndex(_ index: Int) {
         
         guard index != lastSelectedIndex else { return }
         
         
         let label = labelArray[index]
         label.textColor = selectedColor
-        label.transform = CGAffineTransformMakeScale(1.1, 1.1)
+        label.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
         
         let lastLabel = labelArray[lastSelectedIndex]
         lastLabel.textColor = normalColor
-        lastLabel.transform = CGAffineTransformIdentity
+        lastLabel.transform = CGAffineTransform.identity
         
         lastSelectedIndex = index
         
@@ -214,11 +214,11 @@ public class LWScrollNaviView: UIView {
         if offSetX > maxOffSetX {
             offSetX = maxOffSetX
         }
-        scrollView.setContentOffset(CGPointMake(offSetX, 0), animated: true)
-        UIView.animateWithDuration(0.3) { 
+        scrollView.setContentOffset(CGPoint(x: offSetX, y: 0), animated: true)
+        UIView.animate(withDuration: 0.3, animations: { 
             self.indicatorView.frame.size.width = label.frame.size.width
             self.indicatorView.center.x = label.center.x
-        }
+        }) 
     }
 }
 
