@@ -2,6 +2,12 @@
 
 ![图片](https://github.com/magic3584/LWChannelManager/raw/master/screenshot.gif)
 
+# Requirements
+* Xcode 8.0+
+
+* Swift 3.0+
+> Swift 2.3 use 1.0.2
+
 # Installation
 
 ~~## CocoaPods~~
