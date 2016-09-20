@@ -6,7 +6,7 @@
 * Xcode 8.0+
 
 * Swift 3.0+
-> Swift 2.3 use 1.0.2
+> Swift 2.2 use 1.0.2
 
 # Installation
 
