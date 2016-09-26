@@ -165,7 +165,7 @@ open class LWChannelView: UIView {
                     snapCellImageView = nil
                 }
                 
-                self.changedChannels(self.selectedChannelArray!)
+                self.changedChannels(self.selectedChannelArray!, unselectedChannels: self.unselectedChannelArray!)
 
                 print(selectedChannelArray)
                 print(unselectedChannelArray)
@@ -182,8 +182,10 @@ open class LWChannelView: UIView {
         return snap
     }
     
-    fileprivate func changedChannels(_ channels: [String]) {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "LWChangeChannelNotification"), object: self)
+    fileprivate func changedChannels(_ selectedChannels: [String], unselectedChannels: [String]) {
+        let dic = [ "selectedChannels": selectedChannels,
+                    "unselectedChannels": unselectedChannels ]
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "LWChangeChannelNotification"), object: self, userInfo: dic)
     }
 }
 
@@ -246,7 +248,7 @@ extension LWChannelView: UICollectionViewDataSource, UICollectionViewDelegate {
             self.selectedChannelArray?.append(channel!)
         }
         collectionView.reloadData()
-        self.changedChannels(self.selectedChannelArray!)
+        self.changedChannels(self.selectedChannelArray!, unselectedChannels: self.unselectedChannelArray!)
     }
     
 }

@@ -10,11 +10,14 @@ import UIKit
 
 class SecondViewController: UIViewController {
 
+    public var selectedChannels: [String]!
+    public var unselectedChannels: [String]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let channelView = LWChannelView.init(frame: self.view.frame,
-                                             selectedChannels: [ "不动", "生活", "头条", "科技", "娱乐", "人文", "健康", "美食", "国内", "语文", "数学", "理化生" ],
-                                             unselectedChannels: ["11", "12", "13", "14", "15", "16", "17", "18", "19" ])
+                                             selectedChannels: self.selectedChannels,
+                                             unselectedChannels: self.unselectedChannels)
         self.view.addSubview(channelView)
         // Do any additional setup after loading the view.
     }

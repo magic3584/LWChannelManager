@@ -23,7 +23,8 @@ open class LWScrollNaviView: UIView {
     
     open weak var delegate: LWScrollNaviViewDelegate?
     
-    fileprivate var titleArray: [String]!
+    open var selectedChannels: [String]!
+    open var unselectedChannels: [String] = []
     fileprivate var labelArray: [UILabel] = []
     fileprivate var showAddButton: Bool?
     //缓存每个label的宽度
@@ -37,9 +38,10 @@ open class LWScrollNaviView: UIView {
     
     open var lastSelectedIndex = 0
     
-    public init(frame: CGRect, titles: [String], showAddButton: Bool) {
+    public init(frame: CGRect, selectedChannels: [String], unselectedChannels: [String],showAddButton: Bool) {
         super.init(frame: frame)
-        self.titleArray = titles
+        self.selectedChannels = selectedChannels
+        self.unselectedChannels = unselectedChannels
         self.showAddButton = showAddButton
         NotificationCenter.default.addObserver(self, selector: #selector(self.changedChannel(_:)), name: NSNotification.Name(rawValue: "LWChangeChannelNotification"), object: nil)
         configUI()
@@ -75,7 +77,7 @@ open class LWScrollNaviView: UIView {
             
             var totalWidth:CGFloat = 0.0
             
-            for (index, title) in self.titleArray.enumerated() {
+            for (index, title) in self.selectedChannels.enumerated() {
                 
                 let label = UILabel()
     
@@ -137,16 +139,20 @@ open class LWScrollNaviView: UIView {
         for (_, label) in self.labelArray.enumerated() {
             label.removeFromSuperview()
         }
-        self.titleArray.removeAll()
+        self.selectedChannels.removeAll()
+        self.unselectedChannels.removeAll()
         self.labelArray.removeAll()
         self.labelWidthArray.removeAll()
         
+        let selectedChannels = noti.userInfo!["selectedChannels"]! as! [String]
+        let unselectedChannels = noti.userInfo!["unselectedChannels"]! as! [String]
+        self.selectedChannels = selectedChannels
+        self.unselectedChannels = unselectedChannels
+        
         //添加新的
-        lastSelectedIndex = 0
-        self.titleArray = (noti.object as! LWChannelView).selectedChannelArray!
         var totalWidth:CGFloat = 0.0
         
-        for (index, title) in self.titleArray.enumerated() {
+        for (index, title) in self.selectedChannels.enumerated() {
             
             let label = UILabel()
             
@@ -175,6 +181,7 @@ open class LWScrollNaviView: UIView {
         scrollView.setContentOffset(CGPoint.zero, animated: false)
         
         //默认第一个选中
+        lastSelectedIndex = 0
         let label = labelArray[lastSelectedIndex]
         label.textColor = selectedColor
         label.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
