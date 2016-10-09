@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
 
   s.name         = "LWChannelManager"
-  s.version      = "2.0.4"
+  s.version      = "2.0.5"
   s.summary      = "LWChannelManager"
 
 
